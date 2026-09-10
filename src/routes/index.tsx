@@ -1,24 +1,41 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+import { Navbar } from "@/components/site/Navbar";
+import { Footer } from "@/components/site/Footer";
+import { About, Contact, Gallery, Hero, Services, Why } from "@/components/site/Sections";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "The Wolf Man Salon — Barberia premium a Perugia" },
+      {
+        name: "description",
+        content:
+          "Barberia premium a Perugia: tagli, barba, rasatura e styling. Prenota online il tuo appuntamento in pochi secondi.",
+      },
+      { property: "og:title", content: "The Wolf Man Salon — Barberia premium a Perugia" },
+      {
+        property: "og:description",
+        content: "Il tuo stile. La nostra precisione. Prenota online da The Wolf Man Salon.",
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <main>
+        <Hero />
+        <About />
+        <Services />
+        <Gallery />
+        <Why />
+        <Contact />
+      </main>
+      <Footer />
     </div>
   );
 }
