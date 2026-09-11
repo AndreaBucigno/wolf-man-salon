@@ -13,6 +13,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PrenotaRouteImport } from './routes/prenota'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminBlocchiRouteImport } from './routes/admin.blocchi'
+import { Route as AdminGalleriaRouteImport } from './routes/admin.galleria'
+import { Route as AdminImpostazioniRouteImport } from './routes/admin.impostazioni'
+import { Route as AdminOrariRouteImport } from './routes/admin.orari'
+import { Route as AdminPrenotazioniRouteImport } from './routes/admin.prenotazioni'
+import { Route as AdminServiziRouteImport } from './routes/admin.servizi'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,37 +41,125 @@ const PrenotaRoute = PrenotaRouteImport.update({
   path: '/prenota',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBlocchiRoute = AdminBlocchiRouteImport.update({
+  id: '/blocchi',
+  path: '/blocchi',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminGalleriaRoute = AdminGalleriaRouteImport.update({
+  id: '/galleria',
+  path: '/galleria',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminImpostazioniRoute = AdminImpostazioniRouteImport.update({
+  id: '/impostazioni',
+  path: '/impostazioni',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOrariRoute = AdminOrariRouteImport.update({
+  id: '/orari',
+  path: '/orari',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPrenotazioniRoute = AdminPrenotazioniRouteImport.update({
+  id: '/prenotazioni',
+  path: '/prenotazioni',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminServiziRoute = AdminServiziRouteImport.update({
+  id: '/servizi',
+  path: '/servizi',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
   '/prenota': typeof PrenotaRoute
+  '/admin/blocchi': typeof AdminBlocchiRoute
+  '/admin/galleria': typeof AdminGalleriaRoute
+  '/admin/impostazioni': typeof AdminImpostazioniRoute
+  '/admin/orari': typeof AdminOrariRoute
+  '/admin/prenotazioni': typeof AdminPrenotazioniRoute
+  '/admin/servizi': typeof AdminServiziRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/prenota': typeof PrenotaRoute
+  '/admin/blocchi': typeof AdminBlocchiRoute
+  '/admin/galleria': typeof AdminGalleriaRoute
+  '/admin/impostazioni': typeof AdminImpostazioniRoute
+  '/admin/orari': typeof AdminOrariRoute
+  '/admin/prenotazioni': typeof AdminPrenotazioniRoute
+  '/admin/servizi': typeof AdminServiziRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
   '/prenota': typeof PrenotaRoute
+  '/admin/blocchi': typeof AdminBlocchiRoute
+  '/admin/galleria': typeof AdminGalleriaRoute
+  '/admin/impostazioni': typeof AdminImpostazioniRoute
+  '/admin/orari': typeof AdminOrariRoute
+  '/admin/prenotazioni': typeof AdminPrenotazioniRoute
+  '/admin/servizi': typeof AdminServiziRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/login' | '/prenota'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/prenota'
+    | '/admin/blocchi'
+    | '/admin/galleria'
+    | '/admin/impostazioni'
+    | '/admin/orari'
+    | '/admin/prenotazioni'
+    | '/admin/servizi'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/login' | '/prenota'
-  id: '__root__' | '/' | '/admin' | '/login' | '/prenota'
+  to:
+    | '/'
+    | '/login'
+    | '/prenota'
+    | '/admin/blocchi'
+    | '/admin/galleria'
+    | '/admin/impostazioni'
+    | '/admin/orari'
+    | '/admin/prenotazioni'
+    | '/admin/servizi'
+    | '/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/prenota'
+    | '/admin/blocchi'
+    | '/admin/galleria'
+    | '/admin/impostazioni'
+    | '/admin/orari'
+    | '/admin/prenotazioni'
+    | '/admin/servizi'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   LoginRoute: typeof LoginRoute
   PrenotaRoute: typeof PrenotaRoute
 }
@@ -99,12 +194,83 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrenotaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/blocchi': {
+      id: '/admin/blocchi'
+      path: '/blocchi'
+      fullPath: '/admin/blocchi'
+      preLoaderRoute: typeof AdminBlocchiRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/galleria': {
+      id: '/admin/galleria'
+      path: '/galleria'
+      fullPath: '/admin/galleria'
+      preLoaderRoute: typeof AdminGalleriaRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/impostazioni': {
+      id: '/admin/impostazioni'
+      path: '/impostazioni'
+      fullPath: '/admin/impostazioni'
+      preLoaderRoute: typeof AdminImpostazioniRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/orari': {
+      id: '/admin/orari'
+      path: '/orari'
+      fullPath: '/admin/orari'
+      preLoaderRoute: typeof AdminOrariRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/prenotazioni': {
+      id: '/admin/prenotazioni'
+      path: '/prenotazioni'
+      fullPath: '/admin/prenotazioni'
+      preLoaderRoute: typeof AdminPrenotazioniRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/servizi': {
+      id: '/admin/servizi'
+      path: '/servizi'
+      fullPath: '/admin/servizi'
+      preLoaderRoute: typeof AdminServiziRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminBlocchiRoute: typeof AdminBlocchiRoute
+  AdminGalleriaRoute: typeof AdminGalleriaRoute
+  AdminImpostazioniRoute: typeof AdminImpostazioniRoute
+  AdminOrariRoute: typeof AdminOrariRoute
+  AdminPrenotazioniRoute: typeof AdminPrenotazioniRoute
+  AdminServiziRoute: typeof AdminServiziRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminBlocchiRoute: AdminBlocchiRoute,
+  AdminGalleriaRoute: AdminGalleriaRoute,
+  AdminImpostazioniRoute: AdminImpostazioniRoute,
+  AdminOrariRoute: AdminOrariRoute,
+  AdminPrenotazioniRoute: AdminPrenotazioniRoute,
+  AdminServiziRoute: AdminServiziRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   LoginRoute: LoginRoute,
   PrenotaRoute: PrenotaRoute,
 }
