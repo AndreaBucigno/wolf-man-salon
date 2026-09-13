@@ -25,10 +25,10 @@ export function Hero() {
       <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/60 to-background" />
       <div className="container-x relative pt-28 pb-16">
         <div className="fade-up max-w-3xl">
-          <div className="h-11 w-11 overflow-hidden rounded-full border border-border bg-background">
+          <div className="mb-8 h-24 w-24 overflow-hidden rounded-full border border-border bg-background">
             <img
               src={logo.url}
-              alt="The Wolf Man Salon"
+              alt="Logo lupo The Wolf Man Salon"
               width={110}
               height={110}
               className="h-full w-full object-cover"
