@@ -24,9 +24,8 @@ import {
 type Search = { servizio?: string };
 
 export const Route = createFileRoute("/prenota")({
-  validateSearch: (search: Record<string, unknown>): Search => ({
-    servizio: typeof search["servizio"] === "string" ? search["servizio"] : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): Search =>
+    typeof search["servizio"] === "string" ? { servizio: search["servizio"] } : {},
   head: () => ({
     meta: [
       { title: "Prenota — The Wolf Man Salon" },
@@ -323,7 +322,7 @@ function MonthCalendar({
 }: {
   cursor: Date;
   onCursor: (d: Date) => void;
-  selected?: string;
+  selected?: string | undefined;
   onSelect: (iso: string) => void;
 }) {
   const first = new Date(cursor.getFullYear(), cursor.getMonth(), 1);
