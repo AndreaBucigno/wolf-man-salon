@@ -31,13 +31,15 @@ export function Navbar() {
     >
       <nav className="container-x flex h-20 items-center justify-between">
         <Link to="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-          <img
-            src={logo.url}
-            alt="The Wolf Man Salon"
-            width={48}
-            height={48}
-            className="h-11 w-11 object-contain"
-          />
+          <div className="rounded-full border border-border bg-background p-2">
+            <img
+              src={logo.url}
+              alt="The Wolf Man Salon"
+              width={48}
+              height={48}
+              className="h-11 w-11 object-contain"
+            />
+          </div>
           <span className="hidden font-display text-sm tracking-[0.3em] text-foreground sm:block">
             THE WOLF MAN
           </span>
