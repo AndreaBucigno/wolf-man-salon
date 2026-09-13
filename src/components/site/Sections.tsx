@@ -25,13 +25,15 @@ export function Hero() {
       <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/60 to-background" />
       <div className="container-x relative pt-28 pb-16">
         <div className="fade-up max-w-3xl">
-          <img
-            src={logo.url}
-            alt="Logo lupo The Wolf Man Salon"
-            width={110}
-            height={110}
-            className="mb-8 h-24 w-24 object-contain invert"
-          />
+          <div className="mb-8 h-24 w-24 overflow-hidden rounded-full border border-border bg-background">
+            <img
+              src={logo.url}
+              alt="Logo lupo The Wolf Man Salon"
+              width={110}
+              height={110}
+              className="h-full w-full object-cover"
+            />
+          </div>
           <p className="eyebrow">Barberia · Perugia</p>
           <h1 className="mt-4 font-display text-4xl leading-tight sm:text-6xl lg:text-7xl">
             THE WOLF MAN
