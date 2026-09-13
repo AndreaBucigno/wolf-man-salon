@@ -29,8 +29,8 @@ export function Hero() {
             <img
               src={logo.url}
               alt="The Wolf Man Salon"
-              width={48}
-              height={48}
+              width={110}
+              height={110}
               className="h-full w-full object-cover"
             />
           </div>
