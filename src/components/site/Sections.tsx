@@ -77,7 +77,7 @@ export function About() {
               width={64}
               height={64}
               loading="lazy"
-              className="h-14 w-14 object-contain invert"
+              className="h-14 w-14 object-contain"
             />
           </div>
         </div>
