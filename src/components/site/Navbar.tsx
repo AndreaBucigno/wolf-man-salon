@@ -36,7 +36,7 @@ export function Navbar() {
             alt="The Wolf Man Salon"
             width={48}
             height={48}
-            className="h-11 w-11 object-contain invert"
+            className="h-11 w-11 object-contain"
           />
           <span className="hidden font-display text-sm tracking-[0.3em] text-foreground sm:block">
             THE WOLF MAN
