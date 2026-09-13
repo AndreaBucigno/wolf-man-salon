@@ -30,7 +30,7 @@ export function Hero() {
             alt="Logo lupo The Wolf Man Salon"
             width={110}
             height={110}
-            className="mb-8 h-24 w-24 object-contain invert"
+            className="mb-8 h-24 w-24 object-contain"
           />
           <p className="eyebrow">Barberia · Perugia</p>
           <h1 className="mt-4 font-display text-4xl leading-tight sm:text-6xl lg:text-7xl">
