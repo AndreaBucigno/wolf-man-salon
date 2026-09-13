@@ -56,13 +56,15 @@ function Login() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-5">
       <form onSubmit={submit} className="panel w-full max-w-sm p-8">
-        <img
-          src={logo.url}
-          alt="The Wolf Man Salon"
-          width={72}
-          height={72}
-          className="mx-auto h-16 w-16 object-contain"
-        />
+        <div className="mx-auto h-16 w-16 overflow-hidden rounded-full border border-border bg-background">
+           <img
+             src={logo.url}
+             alt="The Wolf Man Salon"
+             width={72}
+             height={72}
+             className="h-full w-full object-cover"
+           />
+         </div>
         <h1 className="mt-6 text-center font-display text-2xl uppercase tracking-[0.15em]">
           Area riservata
         </h1>
