@@ -13,7 +13,7 @@ export function Footer() {
           width={72}
           height={72}
           loading="lazy"
-          className="h-16 w-16 object-contain invert"
+          className="h-16 w-16 object-contain"
         />
         <p className="font-display text-lg tracking-[0.25em]">THE WOLF MAN SALON</p>
         <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs uppercase tracking-[0.2em] text-muted-foreground">
