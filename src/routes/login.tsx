@@ -38,7 +38,7 @@ function Login() {
     if (mode === "signin") {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       setBusy(false);
-      if (error) return toast.error("Credenziali non valide.");
+      if (error) { toast.error("Credenziali non valide."); return; }
       navigate({ to: "/admin" });
     } else {
       const { data, error } = await supabase.auth.signUp({
@@ -47,7 +47,7 @@ function Login() {
         options: { emailRedirectTo: window.location.origin + "/admin" },
       });
       setBusy(false);
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
       if (data.session) navigate({ to: "/admin" });
       else toast.success("Controlla la tua email per confermare l'account.");
     }

@@ -42,7 +42,7 @@ function SettingsAdmin() {
     const rows = FIELDS.map((f) => ({ key: f.key, value: values[f.key] ?? "" }));
     const { error } = await supabase.from("settings").upsert(rows, { onConflict: "key" });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Impostazioni salvate.");
     void query.refetch();
   }

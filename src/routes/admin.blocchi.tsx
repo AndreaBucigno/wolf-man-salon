@@ -33,7 +33,7 @@ function BlocksAdmin() {
   });
 
   async function add() {
-    if (!form.block_date) return toast.error("Scegli una data.");
+    if (!form.block_date) { toast.error("Scegli una data."); return; }
     const { error } = await supabase.from("blocked_slots").insert({
       block_date: form.block_date,
       start_time: form.all_day ? "00:00" : form.start_time,
@@ -41,14 +41,14 @@ function BlocksAdmin() {
       all_day: form.all_day,
       reason: form.reason.trim() || "Altro",
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Blocco aggiunto.");
     void list.refetch();
   }
 
   async function remove(id: string) {
     const { error } = await supabase.from("blocked_slots").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     void list.refetch();
   }
 

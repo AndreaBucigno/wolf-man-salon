@@ -103,7 +103,7 @@ export function AppointmentDialog({ appointment, defaults, services, onClose, on
       ? await supabase.from("appointments").update(payload).eq("id", appointment.id)
       : await supabase.from("appointments").insert(payload);
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(appointment ? "Appuntamento aggiornato." : "Appuntamento creato.");
     onSaved();
     onClose();
@@ -112,7 +112,7 @@ export function AppointmentDialog({ appointment, defaults, services, onClose, on
   async function setStatus(status: AppointmentStatus) {
     if (!appointment) return;
     const { error } = await supabase.from("appointments").update({ status }).eq("id", appointment.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(`Stato: ${STATUS_LABEL[status]}`);
     onSaved();
     onClose();
@@ -121,7 +121,7 @@ export function AppointmentDialog({ appointment, defaults, services, onClose, on
   async function remove() {
     if (!appointment) return;
     const { error } = await supabase.from("appointments").delete().eq("id", appointment.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Appuntamento eliminato.");
     onSaved();
     onClose();

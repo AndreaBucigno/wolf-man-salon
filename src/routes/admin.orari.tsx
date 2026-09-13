@@ -47,7 +47,7 @@ function HoursAdmin() {
         .eq("id", r.id);
       if (error) {
         setBusy(false);
-        return toast.error(error.message);
+        { toast.error(error.message); return; }
       }
     }
     setBusy(false);

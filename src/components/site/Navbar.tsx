@@ -48,7 +48,7 @@ export function Navbar() {
             <li key={l.label}>
               <Link
                 to={l.to}
-                hash={l.hash}
+                {...(l.hash ? { hash: l.hash } : {})}
                 className="text-xs uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:text-gold"
               >
                 {l.label}
@@ -78,7 +78,7 @@ export function Navbar() {
               <li key={l.label}>
                 <Link
                   to={l.to}
-                  hash={l.hash}
+                  {...(l.hash ? { hash: l.hash } : {})}
                   onClick={() => setOpen(false)}
                   className="block py-3 text-sm uppercase tracking-[0.2em] text-muted-foreground"
                 >
