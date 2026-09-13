@@ -399,7 +399,7 @@ function Confirmation({ data }: { data: Confirmed }) {
           alt="The Wolf Man Salon"
           width={110}
           height={110}
-          className="h-24 w-24 object-contain invert"
+          className="h-24 w-24 object-contain"
         />
         <Check size={28} className="mt-8 text-gold" />
         <h1 className="mt-4 font-display text-3xl uppercase tracking-[0.15em] sm:text-4xl">
