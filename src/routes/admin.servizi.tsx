@@ -33,7 +33,7 @@ function ServicesAdmin() {
   });
 
   async function save() {
-    if (form.name.trim().length < 2) return toast.error("Inserisci il nome del servizio.");
+    if (form.name.trim().length < 2) { toast.error("Inserisci il nome del servizio."); return; }
     const payload = {
       name: form.name.trim(),
       description: form.description.trim(),
@@ -45,7 +45,7 @@ function ServicesAdmin() {
     const { error } = editing
       ? await supabase.from("services").update(payload).eq("id", editing)
       : await supabase.from("services").insert(payload);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(editing ? "Servizio aggiornato." : "Servizio creato.");
     setForm({ ...EMPTY });
     setEditing(null);
@@ -57,13 +57,13 @@ function ServicesAdmin() {
       .from("services")
       .update({ is_active: !s.is_active })
       .eq("id", s.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     void list.refetch();
   }
 
   async function remove(id: string) {
     const { error } = await supabase.from("services").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Servizio eliminato.");
     void list.refetch();
   }

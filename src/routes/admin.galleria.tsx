@@ -31,14 +31,14 @@ function GalleryAdmin() {
 
   async function add() {
     if (!/^https?:\/\//.test(form.image_url.trim()))
-      return toast.error("Inserisci un indirizzo immagine valido (https://…).");
+      { toast.error("Inserisci un indirizzo immagine valido (https://…)."); return; }
     const { error } = await supabase.from("gallery").insert({
       image_url: form.image_url.trim(),
       title: form.title.trim() || null,
       category: form.category.trim() || "Stile",
       sort_order: Number(form.sort_order),
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Foto aggiunta.");
     setForm({ image_url: "", title: "", category: "Stile", sort_order: 0 });
     void list.refetch();
@@ -46,7 +46,7 @@ function GalleryAdmin() {
 
   async function remove(id: string) {
     const { error } = await supabase.from("gallery").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     void list.refetch();
   }
 
