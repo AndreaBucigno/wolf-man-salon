@@ -61,7 +61,7 @@ function Login() {
           alt="The Wolf Man Salon"
           width={72}
           height={72}
-          className="mx-auto h-16 w-16 object-contain invert"
+          className="mx-auto h-16 w-16 object-contain"
         />
         <h1 className="mt-6 text-center font-display text-2xl uppercase tracking-[0.15em]">
           Area riservata
