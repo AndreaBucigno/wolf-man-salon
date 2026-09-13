@@ -19,6 +19,53 @@ type Item = {
   media_type: "image" | "video";
 };
 
+function guessVideoMime(url: string): string {
+  const ext = url.split("?")[0].split(".").pop()?.toLowerCase();
+  switch (ext) {
+    case "mov":
+      return "video/quicktime";
+    case "webm":
+      return "video/webm";
+    case "ogg":
+    case "ogv":
+      return "video/ogg";
+    default:
+      return "video/mp4";
+  }
+}
+
+function GalleryThumb({ item }: { item: Item }) {
+  const [videoFailed, setVideoFailed] = useState(false);
+
+  if (item.media_type !== "video") {
+    return (
+      <img
+        src={item.image_url}
+        alt={item.title ?? "Foto salone"}
+        loading="lazy"
+        className="h-40 w-full object-cover"
+      />
+    );
+  }
+
+  if (videoFailed) {
+    return (
+      <div className="flex h-40 w-full flex-col items-center justify-center gap-1 bg-carbon px-3 text-center text-[11px] text-muted-foreground">
+        Anteprima non disponibile in questo browser
+        <a href={item.image_url} target="_blank" rel="noreferrer" className="text-gold underline">
+          Apri il file
+        </a>
+      </div>
+    );
+  }
+
+  return (
+    <video muted loop playsInline autoPlay onError={() => setVideoFailed(true)} className="h-40 w-full object-cover">
+      <source src={item.image_url} type={guessVideoMime(item.image_url)} />
+    </video>
+  );
+}
+
 function GalleryAdmin() {
   const [form, setForm] = useState({
     image_url: "",
@@ -40,7 +87,7 @@ function GalleryAdmin() {
     if (!/^https?:\/\//.test(form.image_url.trim())) {
       toast.error(
         form.media_type === "video"
-          ? "Inserisci un indirizzo video valido (https://…, file .mp4)."
+          ? "Inserisci un indirizzo video valido (https://…, file .mp4 o .mov)."
           : "Inserisci un indirizzo immagine valido (https://…).",
       );
       return;
@@ -94,7 +141,7 @@ function GalleryAdmin() {
           className="field sm:col-span-2"
           placeholder={
             form.media_type === "video"
-              ? "Indirizzo video (https://…, file .mp4)"
+              ? "Indirizzo video (https://…, file .mp4 o .mov)"
               : "Indirizzo immagine (https://…)"
           }
           value={form.image_url}
@@ -120,23 +167,7 @@ function GalleryAdmin() {
       <div className="mt-6 grid gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {(list.data ?? []).map((g) => (
           <div key={g.id} className="panel overflow-hidden p-0">
-            {g.media_type === "video" ? (
-              <video
-                src={g.image_url}
-                muted
-                loop
-                playsInline
-                autoPlay
-                className="h-40 w-full object-cover"
-              />
-            ) : (
-              <img
-                src={g.image_url}
-                alt={g.title ?? "Foto salone"}
-                loading="lazy"
-                className="h-40 w-full object-cover"
-              />
-            )}
+            <GalleryThumb item={g} />
             <div className="flex items-center justify-between gap-2 p-3">
               <div className="min-w-0">
                 <p className="truncate text-sm">{g.title ?? "—"}</p>
