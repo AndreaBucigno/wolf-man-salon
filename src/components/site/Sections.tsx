@@ -25,15 +25,13 @@ export function Hero() {
       <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/60 to-background" />
       <div className="container-x relative pt-28 pb-16">
         <div className="fade-up max-w-3xl">
-          <div className="mb-8 h-24 w-24 overflow-hidden rounded-full border border-border bg-background">
-            <img
-              src={logo.url}
-              alt="Logo lupo The Wolf Man Salon"
-              width={110}
-              height={110}
-              className="h-full w-full object-cover"
-            />
-          </div>
+          <img
+            src={logo.url}
+            alt="Logo lupo The Wolf Man Salon"
+            width={110}
+            height={110}
+            className="mb-8 h-24 w-24 object-contain invert"
+          />
           <p className="eyebrow">Barberia · Perugia</p>
           <h1 className="mt-4 font-display text-4xl leading-tight sm:text-6xl lg:text-7xl">
             THE WOLF MAN
@@ -72,7 +70,7 @@ export function About() {
             loading="lazy"
             className="w-full rounded-sm border border-border object-cover"
           />
-          <div className="absolute -bottom-6 -right-4 hidden rounded-sm border border-border bg-background p-4 sm:block">
+          <div className="absolute -bottom-6 -right-4 hidden rounded-full border border-border bg-background p-4 sm:block">
             <img
               src={logo.url}
               alt=""
@@ -162,14 +160,37 @@ export function Services() {
   );
 }
 
-const gallery = [
-  { src: g1, alt: "Taglio sfumato", cat: "Tagli", tall: true },
-  { src: g2, alt: "Rasatura della barba", cat: "Barba", tall: false },
-  { src: g3, alt: "Strumenti del barbiere", cat: "Stile", tall: false },
-  { src: g4, alt: "Il salone", cat: "Salone", tall: true },
+type GalleryPhoto = {
+  id: string;
+  image_url: string;
+  title: string | null;
+  category: string;
+};
+
+const fallbackGallery: GalleryPhoto[] = [
+  { id: "fallback-1", image_url: g1, title: "Taglio sfumato", category: "Tagli" },
+  { id: "fallback-2", image_url: g2, title: "Rasatura della barba", category: "Barba" },
+  { id: "fallback-3", image_url: g3, title: "Strumenti del barbiere", category: "Stile" },
+  { id: "fallback-4", image_url: g4, title: "Il salone", category: "Salone" },
 ];
 
 export function Gallery() {
+  const { data: photos } = useQuery({
+    queryKey: ["public-gallery"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("gallery")
+        .select("id,image_url,title,category")
+        .order("sort_order");
+      if (error) throw error;
+      return data as GalleryPhoto[];
+    },
+  });
+
+  // Finché non ci sono foto caricate da admin, mostriamo le immagini di default
+  // così la sezione non resta vuota.
+  const items = photos && photos.length > 0 ? photos : fallbackGallery;
+
   return (
     <section id="galleria" className="scroll-mt-24 border-t border-border py-24">
       <div className="container-x">
@@ -178,21 +199,21 @@ export function Gallery() {
         <h2 className="font-display text-3xl sm:text-4xl">Il nostro lavoro</h2>
 
         <div className="mt-12 grid grid-cols-2 gap-4 lg:grid-cols-4">
-          {gallery.map((img) => (
+          {items.map((img, i) => (
             <figure
-              key={img.alt}
+              key={img.id}
               className={`group relative overflow-hidden rounded-sm border border-border ${
-                img.tall ? "row-span-2 aspect-[3/4]" : "aspect-square"
+                i % 3 === 0 ? "row-span-2 aspect-[3/4]" : "aspect-square"
               }`}
             >
               <img
-                src={img.src}
-                alt={img.alt}
+                src={img.image_url}
+                alt={img.title ?? "Foto della barberia"}
                 loading="lazy"
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <figcaption className="absolute inset-0 flex items-end bg-gradient-to-t from-background via-background/20 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <span className="text-xs uppercase tracking-[0.25em] text-gold">{img.cat}</span>
+                <span className="text-xs uppercase tracking-[0.25em] text-gold">{img.category}</span>
               </figcaption>
             </figure>
           ))}
