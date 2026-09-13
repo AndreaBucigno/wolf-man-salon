@@ -29,6 +29,8 @@ export const Route = createFileRoute("/admin/")({
 });
 
 const SLOT = 15;
+const ROW_HEIGHT = 28; // px per slot da 15 minuti
+const HEADER_HEIGHT = 52; // px, altezza intestazione giorno
 
 function AdminCalendar() {
   const [mode, setMode] = useState<"week" | "day">("week");
@@ -147,69 +149,104 @@ function AdminCalendar() {
       </header>
 
       <div className="panel mt-6 overflow-x-auto p-0">
-        <div
-          className="min-w-[720px]"
-          style={{ display: "grid", gridTemplateColumns: `64px repeat(${days.length}, 1fr)` }}
-        >
-          <div className="border-b border-border bg-carbon" />
-          {days.map((d) => (
-            <div
-              key={d.toISOString()}
-              className="border-b border-l border-border bg-carbon px-2 py-3 text-center"
-            >
-              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                {WEEKDAYS[d.getDay()]?.slice(0, 3)}
-              </p>
-              <p className="font-display text-lg">{d.getDate()}</p>
-            </div>
-          ))}
-
-          {Array.from({ length: rows }, (_, r) => {
-            const t = open + r * SLOT;
-            const label = fromMinutes(t);
-            return (
-              <div key={t} className="contents">
-                <div className="border-b border-border/60 px-2 py-1 text-right text-[10px] text-muted-foreground">
+        <div className="flex min-w-[720px]">
+          {/* colonna orari */}
+          <div className="w-16 shrink-0 border-r border-border bg-carbon">
+            <div className="border-b border-border" style={{ height: HEADER_HEIGHT }} />
+            {Array.from({ length: rows }, (_, r) => {
+              const t = open + r * SLOT;
+              const label = fromMinutes(t);
+              return (
+                <div
+                  key={t}
+                  style={{ height: ROW_HEIGHT }}
+                  className="flex items-start justify-end border-b border-border/60 px-2 pt-0.5 text-right text-[10px] text-muted-foreground"
+                >
                   {t % 60 === 0 ? label : ""}
                 </div>
-                {days.map((d) => {
-                  const iso = toISODate(d);
-                  const bh = hours.data?.find((h) => h.weekday === d.getDay());
-                  const closed =
-                    !bh ||
-                    bh.is_closed ||
-                    t < minutes(bh.open_time) ||
-                    t >= minutes(bh.close_time) ||
-                    (bh.break_start &&
-                      bh.break_end &&
-                      t >= minutes(bh.break_start) &&
-                      t < minutes(bh.break_end)) ||
-                    (blocks.data ?? []).some(
-                      (b) =>
-                        b.block_date === iso &&
-                        (b.all_day || (t >= minutes(b.start_time) && t < minutes(b.end_time))),
+              );
+            })}
+          </div>
+
+          {/* colonne giorni */}
+          {days.map((d) => {
+            const iso = toISODate(d);
+            const bh = hours.data?.find((h) => h.weekday === d.getDay());
+            const dayAppointments = (appointments.data ?? []).filter(
+              (a) => a.appointment_date === iso && a.status !== "cancelled",
+            );
+
+            return (
+              <div key={iso} className="flex-1 border-l border-border">
+                <div
+                  className="border-b border-border bg-carbon px-2 py-3 text-center"
+                  style={{ height: HEADER_HEIGHT }}
+                >
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                    {WEEKDAYS[d.getDay()]?.slice(0, 3)}
+                  </p>
+                  <p className="font-display text-lg">{d.getDate()}</p>
+                </div>
+
+                <div className="relative" style={{ height: rows * ROW_HEIGHT }}>
+                  {/* celle di sfondo cliccabili per creare un appuntamento */}
+                  {Array.from({ length: rows }, (_, r) => {
+                    const t = open + r * SLOT;
+                    const closed =
+                      !bh ||
+                      bh.is_closed ||
+                      t < minutes(bh.open_time) ||
+                      t >= minutes(bh.close_time) ||
+                      (bh.break_start &&
+                        bh.break_end &&
+                        t >= minutes(bh.break_start) &&
+                        t < minutes(bh.break_end)) ||
+                      (blocks.data ?? []).some(
+                        (b) =>
+                          b.block_date === iso &&
+                          (b.all_day || (t >= minutes(b.start_time) && t < minutes(b.end_time))),
+                      );
+                    const occupied = dayAppointments.some(
+                      (a) => t >= minutes(a.start_time) && t < minutes(a.end_time),
                     );
-                  const appt = (appointments.data ?? []).find(
-                    (a) => a.appointment_date === iso && minutes(a.start_time) === t,
-                  );
-                  return (
-                    <button
-                      key={iso + t}
-                      onClick={() => (appt ? setSelected(appt) : setCreating({ date: iso, start: label }))}
-                      className={`min-h-[26px] border-b border-l border-border/60 px-1 text-left text-[11px] ${
-                        closed ? "bg-carbon/60" : "hover:bg-gold/10"
-                      }`}
-                    >
-                      {appt && (
-                        <span
-                          className={`block truncate rounded-sm border px-1 py-0.5 ${STATUS_CLASS[appt.status]}`}
-                        >
-                          {hhmm(appt.start_time)} {appt.customer_name}
+                    return (
+                      <button
+                        key={t}
+                        disabled={occupied}
+                        onClick={() => setCreating({ date: iso, start: fromMinutes(t) })}
+                        style={{ height: ROW_HEIGHT }}
+                        className={`block w-full border-b border-border/60 ${
+                          closed ? "bg-carbon/60" : occupied ? "" : "hover:bg-gold/10"
+                        }`}
+                      />
+                    );
+                  })}
+
+                  {/* blocchi appuntamento, alti quanto la durata reale */}
+                  {dayAppointments.map((a) => {
+                    const startMin = minutes(a.start_time);
+                    const endMin = minutes(a.end_time);
+                    const top = ((startMin - open) / SLOT) * ROW_HEIGHT;
+                    const height = Math.max(((endMin - startMin) / SLOT) * ROW_HEIGHT - 2, ROW_HEIGHT - 2);
+                    return (
+                      <button
+                        key={a.id}
+                        onClick={() => setSelected(a)}
+                        style={{ top, height, left: 2, right: 2 }}
+                        className={`absolute overflow-hidden rounded-sm border px-1.5 py-0.5 text-left text-[11px] leading-tight shadow-sm ${STATUS_CLASS[a.status]}`}
+                      >
+                        <span className="block truncate font-medium">
+                          {hhmm(a.start_time)} {a.customer_name}
                         </span>
-                      )}
-                    </button>
-                  );
-                })}
+                        {height >= ROW_HEIGHT * 2 && (
+                          <span className="block truncate text-[10px] opacity-80">
+                            {hhmm(a.start_time)}–{hhmm(a.end_time)}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             );
           })}
