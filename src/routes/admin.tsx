@@ -65,13 +65,15 @@ function AdminLayout() {
     <div className="min-h-screen bg-background lg:flex">
       <aside className="border-b border-border bg-carbon lg:min-h-screen lg:w-64 lg:shrink-0 lg:border-b-0 lg:border-r">
         <div className="flex items-center gap-3 px-5 py-5">
-          <img
-            src={logo.url}
-            alt=""
-            width={40}
-            height={40}
-            className="h-9 w-9 object-contain"
-          />
+          <div className="h-9 w-9 overflow-hidden rounded-full border border-border bg-background">
+           <img
+             src={logo.url}
+             alt=""
+             width={40}
+             height={40}
+             className="h-full w-full object-cover"
+           />
+         </div>
           <span className="font-display text-xs tracking-[0.25em]">THE WOLF MAN</span>
         </div>
         <nav className="flex gap-1 overflow-x-auto px-3 pb-3 lg:flex-col lg:overflow-visible lg:pb-6">
