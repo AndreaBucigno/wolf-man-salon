@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 
 import { AppointmentDialog } from "@/components/admin/AppointmentDialog";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
 import {
   addDays,
@@ -33,10 +34,15 @@ const ROW_HEIGHT = 28; // px per slot da 15 minuti
 const HEADER_HEIGHT = 52; // px, altezza intestazione giorno
 
 function AdminCalendar() {
+  const isMobile = useIsMobile();
   const [mode, setMode] = useState<"week" | "day">("week");
   const [anchor, setAnchor] = useState(() => new Date());
   const [selected, setSelected] = useState<Appointment | null>(null);
   const [creating, setCreating] = useState<{ date: string; start: string } | null>(null);
+
+  useEffect(() => {
+    if (isMobile) setMode("day");
+  }, [isMobile]);
 
   const days = useMemo(() => {
     if (mode === "day") return [new Date(anchor)];
@@ -149,7 +155,7 @@ function AdminCalendar() {
       </header>
 
       <div className="panel mt-6 overflow-x-auto p-0">
-        <div className="flex min-w-[720px]">
+        <div className={mode === "day" ? "flex w-full" : "flex min-w-[720px]"}>
           {/* colonna orari */}
           <div className="w-16 shrink-0 border-r border-border bg-carbon">
             <div className="border-b border-border" style={{ height: HEADER_HEIGHT }} />
