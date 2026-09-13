@@ -75,7 +75,7 @@ function AdminLayout() {
               alt=""
               width={40}
               height={40}
-              className="h-9 w-9 object-contain invert"
+              className="h-9 w-9 object-contain"
             />
             <span className="font-display text-xs tracking-[0.25em]">THE WOLF MAN</span>
           </div>
