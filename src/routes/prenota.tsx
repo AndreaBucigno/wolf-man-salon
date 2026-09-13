@@ -394,13 +394,15 @@ function Confirmation({ data }: { data: Confirmed }) {
     <div className="min-h-screen bg-background">
       <Navbar />
       <main className="container-x flex min-h-[80svh] flex-col items-center justify-center py-32 text-center">
-        <img
-          src={logo.url}
-          alt="The Wolf Man Salon"
-          width={110}
-          height={110}
-          className="h-24 w-24 object-contain"
-        />
+       <div className="h-24 w-24 overflow-hidden rounded-full border border-border bg-background">
+          <img
+             src={logo.url}
+             alt="The Wolf Man Salon"
+             width={110}
+             height={110}
+             className="h-full w-full object-cover"
+           />
+         </div>
         <Check size={28} className="mt-8 text-gold" />
         <h1 className="mt-4 font-display text-3xl uppercase tracking-[0.15em] sm:text-4xl">
           Appuntamento prenotato
