@@ -7,14 +7,16 @@ export function Footer() {
   return (
     <footer className="border-t border-border bg-background py-14">
       <div className="container-x flex flex-col items-center gap-8 text-center">
-        <img
-          src={logo.url}
-          alt="The Wolf Man Salon"
-          width={72}
-          height={72}
-          loading="lazy"
-          className="h-16 w-16 object-contain"
-        />
+        <div className="h-16 w-16 overflow-hidden rounded-full border border-border bg-background">
+          <img
+             src={logo.url}
+             alt="The Wolf Man Salon"
+             width={72}
+             height={72}
+             loading="lazy"
+             className="h-full w-full object-cover"
+           />
+         </div>
         <p className="font-display text-lg tracking-[0.25em]">THE WOLF MAN SALON</p>
         <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs uppercase tracking-[0.2em] text-muted-foreground">
           <li>
