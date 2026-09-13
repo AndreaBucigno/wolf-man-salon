@@ -1,14 +1,17 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import {
+  Ban,
   CalendarDays,
   ClipboardList,
   Clock,
   Image as ImageIcon,
   LogOut,
+  Menu,
   Scissors,
   Settings,
-  Ban,
+  X,
 } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -53,6 +56,7 @@ const nav = [
 function AdminLayout() {
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const [open, setOpen] = useState(false);
 
   async function signOut() {
     await qc.cancelQueries();
@@ -64,25 +68,38 @@ function AdminLayout() {
   return (
     <div className="min-h-screen bg-background lg:flex">
       <aside className="border-b border-border bg-carbon lg:min-h-screen lg:w-64 lg:shrink-0 lg:border-b-0 lg:border-r">
-        <div className="flex items-center gap-3 px-5 py-5">
-          <div className="h-9 w-9 overflow-hidden rounded-full border border-border bg-background">
-           <img
-             src={logo.url}
-             alt=""
-             width={40}
-             height={40}
-             className="h-full w-full object-cover"
-           />
-         </div>
-          <span className="font-display text-xs tracking-[0.25em]">THE WOLF MAN</span>
+        <div className="flex items-center justify-between gap-3 px-5 py-5">
+          <div className="flex items-center gap-3">
+            <img
+              src={logo.url}
+              alt=""
+              width={40}
+              height={40}
+              className="h-9 w-9 object-contain invert"
+            />
+            <span className="font-display text-xs tracking-[0.25em]">THE WOLF MAN</span>
+          </div>
+          <button
+            aria-label="Menu"
+            aria-expanded={open}
+            className="rounded-sm border border-border p-2 text-gold lg:hidden"
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </div>
-        <nav className="flex gap-1 overflow-x-auto px-3 pb-3 lg:flex-col lg:overflow-visible lg:pb-6">
+        <nav
+          className={`${
+            open ? "flex" : "hidden"
+          } flex-col gap-1 border-t border-border px-3 pb-3 pt-3 lg:flex lg:overflow-visible lg:border-t-0 lg:pb-6 lg:pt-0`}
+        >
           {nav.map((n) => (
             <Link
               key={n.to}
               to={n.to}
               activeOptions={{ exact: "exact" in n ? n.exact : false }}
               activeProps={{ className: "!text-gold !border-gold bg-gold/10" }}
+              onClick={() => setOpen(false)}
               className="flex shrink-0 items-center gap-3 rounded-sm border border-transparent px-3 py-2.5 text-xs uppercase tracking-[0.15em] text-muted-foreground transition-colors hover:text-gold"
             >
               <n.icon size={15} />
