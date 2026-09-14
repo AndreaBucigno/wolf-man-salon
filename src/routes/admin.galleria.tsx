@@ -20,7 +20,7 @@ type Item = {
 };
 
 function guessVideoMime(url: string): string {
-  const ext = url.split("?")[0].split(".").pop()?.toLowerCase();
+  const ext = (url.split("?")[0] ?? "").split(".").pop()?.toLowerCase();
   switch (ext) {
     case "mov":
       return "video/quicktime";
@@ -79,7 +79,10 @@ function GalleryAdmin() {
     queryKey: ["gallery"],
     queryFn: async () => {
       const { data } = await supabase.from("gallery").select("*").order("sort_order");
-      return (data ?? []) as Item[];
+      return (data ?? []).map((row) => ({
+        ...row,
+        media_type: row.media_type === "video" ? "video" : "image",
+      })) as Item[];
     },
   });
 
