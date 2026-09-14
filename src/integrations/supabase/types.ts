@@ -24,6 +24,7 @@ export type Database = {
           customer_surname: string
           end_time: string
           id: string
+          manage_token: string
           notes: string | null
           price: number | null
           service_id: string | null
@@ -40,6 +41,7 @@ export type Database = {
           customer_surname?: string
           end_time: string
           id?: string
+          manage_token?: string
           notes?: string | null
           price?: number | null
           service_id?: string | null
@@ -56,6 +58,7 @@ export type Database = {
           customer_surname?: string
           end_time?: string
           id?: string
+          manage_token?: string
           notes?: string | null
           price?: number | null
           service_id?: string | null
@@ -293,6 +296,7 @@ export type Database = {
           customer_surname: string
           end_time: string
           id: string
+          manage_token: string
           notes: string | null
           price: number | null
           service_id: string | null
@@ -307,11 +311,37 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      cancel_appointment_by_token: {
+        Args: { p_token: string }
+        Returns: boolean
+      }
+      get_appointment_by_token: {
+        Args: { p_token: string }
+        Returns: {
+          appointment_date: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          customer_surname: string
+          duration_minutes: number
+          end_time: string
+          id: string
+          price: number
+          service_id: string
+          service_name: string
+          start_time: string
+          status: Database["public"]["Enums"]["appointment_status"]
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      reschedule_appointment_by_token: {
+        Args: { p_date: string; p_start: string; p_token: string }
         Returns: boolean
       }
     }

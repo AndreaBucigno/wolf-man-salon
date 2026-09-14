@@ -49,6 +49,7 @@ type Confirmed = {
   date: string;
   start: string;
   end: string;
+  token: string;
 };
 
 function Prenota() {
@@ -118,12 +119,13 @@ function Prenota() {
       toast.error(error.message.includes("disponibile") ? error.message : "Prenotazione fallita.");
       return;
     }
-    const row = data as { start_time: string; end_time: string };
+    const row = data as { start_time: string; end_time: string; manage_token: string };
     setConfirmed({
       service,
       date,
       start: hhmm(row.start_time),
       end: hhmm(row.end_time),
+      token: row.manage_token,
     });
   }
 
@@ -305,6 +307,36 @@ function Prenota() {
   );
 }
 
+function ManageLink({ token }: { token: string }) {
+  const url =
+    typeof window === "undefined" ? "" : `${window.location.origin}/appuntamento?c=${token}`;
+  return (
+    <div className="panel mt-6 w-full max-w-md p-6 text-left">
+      <p className="eyebrow">Gestisci la prenotazione</p>
+      <p className="mt-3 text-sm text-muted-foreground">
+        Conserva questo link: da qui puoi disdire o spostare l&apos;appuntamento quando vuoi.
+      </p>
+      <p className="mt-3 break-all rounded-sm border border-border bg-carbon px-3 py-2 text-xs text-foreground/80">
+        {url}
+      </p>
+      <div className="mt-4 flex flex-wrap gap-3">
+        <button
+          className="btn-ghost-gold"
+          onClick={() => {
+            void navigator.clipboard.writeText(url);
+            toast.success("Link copiato.");
+          }}
+        >
+          Copia link
+        </button>
+        <a href={url} className="btn-gold">
+          Apri
+        </a>
+      </div>
+    </div>
+  );
+}
+
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between gap-6 border-b border-border pb-2">
@@ -419,6 +451,8 @@ function Confirmation({ data }: { data: Confirmed }) {
             <Row label="Prezzo" value={euro(data.service.price)} />
           </dl>
         </div>
+
+        <ManageLink token={data.token} />
 
         <div className="mt-10 flex flex-col gap-3 sm:flex-row">
           <Link to="/" className="btn-ghost-gold">
