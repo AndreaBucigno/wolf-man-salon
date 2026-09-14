@@ -49,6 +49,7 @@ type Confirmed = {
   date: string;
   start: string;
   end: string;
+  token: string;
 };
 
 function Prenota() {
@@ -118,12 +119,13 @@ function Prenota() {
       toast.error(error.message.includes("disponibile") ? error.message : "Prenotazione fallita.");
       return;
     }
-    const row = data as { start_time: string; end_time: string };
+    const row = data as { start_time: string; end_time: string; manage_token: string };
     setConfirmed({
       service,
       date,
       start: hhmm(row.start_time),
       end: hhmm(row.end_time),
+      token: row.manage_token,
     });
   }
 
