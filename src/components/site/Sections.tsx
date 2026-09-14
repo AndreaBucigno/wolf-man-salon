@@ -167,13 +167,14 @@ type GalleryPhoto = {
   image_url: string;
   title: string | null;
   category: string;
+  media_type: "image" | "video";
 };
 
 const fallbackGallery: GalleryPhoto[] = [
-  { id: "fallback-1", image_url: g1, title: "Taglio sfumato", category: "Tagli" },
-  { id: "fallback-2", image_url: g2, title: "Rasatura della barba", category: "Barba" },
-  { id: "fallback-3", image_url: g3, title: "Strumenti del barbiere", category: "Stile" },
-  { id: "fallback-4", image_url: g4, title: "Il salone", category: "Salone" },
+  { id: "fallback-1", image_url: g1, title: "Taglio sfumato", category: "Tagli", media_type: "image" },
+  { id: "fallback-2", image_url: g2, title: "Rasatura della barba", category: "Barba", media_type: "image" },
+  { id: "fallback-3", image_url: g3, title: "Strumenti del barbiere", category: "Stile", media_type: "image" },
+  { id: "fallback-4", image_url: g4, title: "Il salone", category: "Salone", media_type: "image" },
 ];
 
 export function Gallery() {
