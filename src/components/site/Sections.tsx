@@ -167,13 +167,14 @@ type GalleryPhoto = {
   image_url: string;
   title: string | null;
   category: string;
+  media_type: "image" | "video";
 };
 
 const fallbackGallery: GalleryPhoto[] = [
-  { id: "fallback-1", image_url: g1, title: "Taglio sfumato", category: "Tagli" },
-  { id: "fallback-2", image_url: g2, title: "Rasatura della barba", category: "Barba" },
-  { id: "fallback-3", image_url: g3, title: "Strumenti del barbiere", category: "Stile" },
-  { id: "fallback-4", image_url: g4, title: "Il salone", category: "Salone" },
+  { id: "fallback-1", image_url: g1, title: "Taglio sfumato", category: "Tagli", media_type: "image" },
+  { id: "fallback-2", image_url: g2, title: "Rasatura della barba", category: "Barba", media_type: "image" },
+  { id: "fallback-3", image_url: g3, title: "Strumenti del barbiere", category: "Stile", media_type: "image" },
+  { id: "fallback-4", image_url: g4, title: "Il salone", category: "Salone", media_type: "image" },
 ];
 
 export function Gallery() {
@@ -182,10 +183,13 @@ export function Gallery() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("gallery")
-        .select("id,image_url,title,category")
+        .select("id,image_url,title,category,media_type")
         .order("sort_order");
       if (error) throw error;
-      return data as GalleryPhoto[];
+      return (data ?? []).map((row) => ({
+        ...row,
+        media_type: row.media_type === "video" ? "video" : "image",
+      })) as GalleryPhoto[];
     },
   });
 
@@ -208,12 +212,25 @@ export function Gallery() {
                 i % 3 === 0 ? "row-span-2 aspect-[3/4]" : "aspect-square"
               }`}
             >
-              <img
-                src={img.image_url}
-                alt={img.title ?? "Foto della barberia"}
-                loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
+              {img.media_type === "video" ? (
+                <video
+                  src={img.image_url}
+                  muted
+                  loop
+                  playsInline
+                  autoPlay
+                  preload="metadata"
+                  aria-label={img.title ?? "Video della barberia"}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              ) : (
+                <img
+                  src={img.image_url}
+                  alt={img.title ?? "Foto della barberia"}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              )}
               <figcaption className="absolute inset-0 flex items-end bg-gradient-to-t from-background via-background/20 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <span className="text-xs uppercase tracking-[0.25em] text-gold">{img.category}</span>
               </figcaption>
