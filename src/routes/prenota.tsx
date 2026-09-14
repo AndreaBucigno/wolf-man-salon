@@ -422,6 +422,8 @@ function Confirmation({ data }: { data: Confirmed }) {
           </dl>
         </div>
 
+        <ManageLink token={data.token} />
+
         <div className="mt-10 flex flex-col gap-3 sm:flex-row">
           <Link to="/" className="btn-ghost-gold">
             Torna alla home
