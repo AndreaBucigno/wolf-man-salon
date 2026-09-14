@@ -142,6 +142,7 @@ export type Database = {
           created_at: string
           id: string
           image_url: string
+          media_type: string
           sort_order: number
           title: string | null
         }
@@ -150,6 +151,7 @@ export type Database = {
           created_at?: string
           id?: string
           image_url: string
+          media_type?: string
           sort_order?: number
           title?: string | null
         }
@@ -158,6 +160,7 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string
+          media_type?: string
           sort_order?: number
           title?: string | null
         }
