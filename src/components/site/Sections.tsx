@@ -183,10 +183,13 @@ export function Gallery() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("gallery")
-        .select("id,image_url,title,category")
+        .select("id,image_url,title,category,media_type")
         .order("sort_order");
       if (error) throw error;
-      return data as GalleryPhoto[];
+      return (data ?? []).map((row) => ({
+        ...row,
+        media_type: row.media_type === "video" ? "video" : "image",
+      })) as GalleryPhoto[];
     },
   });
 
