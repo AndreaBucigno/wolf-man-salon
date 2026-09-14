@@ -212,12 +212,25 @@ export function Gallery() {
                 i % 3 === 0 ? "row-span-2 aspect-[3/4]" : "aspect-square"
               }`}
             >
-              <img
-                src={img.image_url}
-                alt={img.title ?? "Foto della barberia"}
-                loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
+              {img.media_type === "video" ? (
+                <video
+                  src={img.image_url}
+                  muted
+                  loop
+                  playsInline
+                  autoPlay
+                  preload="metadata"
+                  aria-label={img.title ?? "Video della barberia"}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              ) : (
+                <img
+                  src={img.image_url}
+                  alt={img.title ?? "Foto della barberia"}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              )}
               <figcaption className="absolute inset-0 flex items-end bg-gradient-to-t from-background via-background/20 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <span className="text-xs uppercase tracking-[0.25em] text-gold">{img.category}</span>
               </figcaption>
