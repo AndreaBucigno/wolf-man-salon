@@ -16,6 +16,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as PrenotaRouteImport } from './routes/prenota'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminBlocchiRouteImport } from './routes/admin.blocchi'
+import { Route as AdminClientiRouteImport } from './routes/admin.clienti'
 import { Route as AdminGalleriaRouteImport } from './routes/admin.galleria'
 import { Route as AdminImpostazioniRouteImport } from './routes/admin.impostazioni'
 import { Route as AdminOrariRouteImport } from './routes/admin.orari'
@@ -57,6 +58,11 @@ const AdminBlocchiRoute = AdminBlocchiRouteImport.update({
   path: '/blocchi',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminClientiRoute = AdminClientiRouteImport.update({
+  id: '/clienti',
+  path: '/clienti',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminGalleriaRoute = AdminGalleriaRouteImport.update({
   id: '/galleria',
   path: '/galleria',
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/prenota': typeof PrenotaRoute
   '/admin/blocchi': typeof AdminBlocchiRoute
+  '/admin/clienti': typeof AdminClientiRoute
   '/admin/galleria': typeof AdminGalleriaRoute
   '/admin/impostazioni': typeof AdminImpostazioniRoute
   '/admin/orari': typeof AdminOrariRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/prenota': typeof PrenotaRoute
   '/admin/blocchi': typeof AdminBlocchiRoute
+  '/admin/clienti': typeof AdminClientiRoute
   '/admin/galleria': typeof AdminGalleriaRoute
   '/admin/impostazioni': typeof AdminImpostazioniRoute
   '/admin/orari': typeof AdminOrariRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/prenota': typeof PrenotaRoute
   '/admin/blocchi': typeof AdminBlocchiRoute
+  '/admin/clienti': typeof AdminClientiRoute
   '/admin/galleria': typeof AdminGalleriaRoute
   '/admin/impostazioni': typeof AdminImpostazioniRoute
   '/admin/orari': typeof AdminOrariRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/prenota'
     | '/admin/blocchi'
+    | '/admin/clienti'
     | '/admin/galleria'
     | '/admin/impostazioni'
     | '/admin/orari'
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/prenota'
     | '/admin/blocchi'
+    | '/admin/clienti'
     | '/admin/galleria'
     | '/admin/impostazioni'
     | '/admin/orari'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/prenota'
     | '/admin/blocchi'
+    | '/admin/clienti'
     | '/admin/galleria'
     | '/admin/impostazioni'
     | '/admin/orari'
@@ -228,6 +240,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBlocchiRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/clienti': {
+      id: '/admin/clienti'
+      path: '/clienti'
+      fullPath: '/admin/clienti'
+      preLoaderRoute: typeof AdminClientiRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/galleria': {
       id: '/admin/galleria'
       path: '/galleria'
@@ -268,6 +287,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminBlocchiRoute: typeof AdminBlocchiRoute
+  AdminClientiRoute: typeof AdminClientiRoute
   AdminGalleriaRoute: typeof AdminGalleriaRoute
   AdminImpostazioniRoute: typeof AdminImpostazioniRoute
   AdminOrariRoute: typeof AdminOrariRoute
@@ -278,6 +298,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminBlocchiRoute: AdminBlocchiRoute,
+  AdminClientiRoute: AdminClientiRoute,
   AdminGalleriaRoute: AdminGalleriaRoute,
   AdminImpostazioniRoute: AdminImpostazioniRoute,
   AdminOrariRoute: AdminOrariRoute,
