@@ -88,6 +88,8 @@ function GalleryAdmin() {
     },
   });
 
+  const items = ordered ?? list.data ?? [];
+
   async function add() {
     if (!/^https?:\/\//.test(form.image_url.trim())) {
       toast.error(
