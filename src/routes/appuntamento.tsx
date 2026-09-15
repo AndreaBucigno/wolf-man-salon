@@ -30,7 +30,7 @@ export const Route = createFileRoute("/appuntamento")({
       },
     ],
   }),
-  component: ManageAppointment;
+  component: ManageAppointment,
 });
 
 type Appt = {
