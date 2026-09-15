@@ -167,16 +167,41 @@ function GalleryAdmin() {
         </button>
       </div>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-3 lg:grid-cols-4">
-        {(list.data ?? []).map((g) => (
-          <div key={g.id} className="panel overflow-hidden p-0">
+      <p className="mt-8 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+        Trascina gli elementi per cambiare l'ordine
+      </p>
+
+      <div className="mt-3 grid gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        {items.map((g, i) => (
+          <div
+            key={g.id}
+            draggable
+            onDragStart={() => setDragIndex(i)}
+            onDragOver={(e) => {
+              e.preventDefault();
+              if (dragIndex === null || dragIndex === i) return;
+              const next = [...items];
+              const [moved] = next.splice(dragIndex, 1);
+              if (!moved) return;
+              next.splice(i, 0, moved);
+              setOrdered(next);
+              setDragIndex(i);
+            }}
+            onDragEnd={() => void persistOrder()}
+            className={`panel cursor-grab overflow-hidden p-0 active:cursor-grabbing ${
+              dragIndex === i ? "opacity-60" : ""
+            }`}
+          >
             <GalleryThumb item={g} />
             <div className="flex items-center justify-between gap-2 p-3">
-              <div className="min-w-0">
-                <p className="truncate text-sm">{g.title ?? "—"}</p>
-                <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                  {g.category} {g.media_type === "video" && "· Video"}
-                </p>
+              <div className="flex min-w-0 items-center gap-2">
+                <GripVertical size={14} className="shrink-0 text-muted-foreground" />
+                <div className="min-w-0">
+                  <p className="truncate text-sm">{g.title ?? "—"}</p>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                    {g.category} {g.media_type === "video" && "· Video"}
+                  </p>
+                </div>
               </div>
               <button className="btn-ghost-gold" onClick={() => remove(g.id)}>
                 <Trash2 size={15} />

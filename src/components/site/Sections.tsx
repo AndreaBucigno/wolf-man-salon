@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Clock, Instagram, MapPin, Phone, Scissors, Sparkles, Star, Timer } from "lucide-react";
 
