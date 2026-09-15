@@ -213,16 +213,7 @@ export function Gallery() {
               }`}
             >
               {img.media_type === "video" ? (
-                <video
-                  src={img.image_url}
-                  muted
-                  loop
-                  playsInline
-                  autoPlay
-                  preload="metadata"
-                  aria-label={img.title ?? "Video della barberia"}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+                <LazyVideo src={img.image_url} title={img.title} />
               ) : (
                 <img
                   src={img.image_url}
