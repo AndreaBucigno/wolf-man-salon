@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { GripVertical, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -67,6 +67,8 @@ function GalleryThumb({ item }: { item: Item }) {
 }
 
 function GalleryAdmin() {
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [ordered, setOrdered] = useState<Item[] | null>(null);
   const [form, setForm] = useState({
     image_url: "",
     title: "",
@@ -105,6 +107,19 @@ function GalleryAdmin() {
     if (error) { toast.error(error.message); return; }
     toast.success(form.media_type === "video" ? "Video aggiunto." : "Foto aggiunta.");
     setForm({ image_url: "", title: "", category: "Stile", sort_order: 0, media_type: "image" });
+    void list.refetch();
+  }
+
+  async function persistOrder() {
+    setDragIndex(null);
+    if (!ordered) return;
+    const updates = ordered.map((it, i) => ({ id: it.id, sort_order: i }));
+    for (const u of updates) {
+      const { error } = await supabase.from("gallery").update({ sort_order: u.sort_order }).eq("id", u.id);
+      if (error) { toast.error(error.message); return; }
+    }
+    toast.success("Ordine aggiornato.");
+    setOrdered(null);
     void list.refetch();
   }
 
