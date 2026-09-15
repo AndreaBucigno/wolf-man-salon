@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Clock, Instagram, MapPin, Phone, Scissors, Sparkles, Star, Timer } from "lucide-react";
 
@@ -177,6 +178,47 @@ const fallbackGallery: GalleryPhoto[] = [
   { id: "fallback-4", image_url: g4, title: "Il salone", category: "Salone", media_type: "image" },
 ];
 
+function LazyVideo({ src, title }: { src: string; title: string | null }) {
+  const ref = useRef<HTMLVideoElement | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setVisible(true);
+      return;
+    }
+    const obs = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            setVisible(true);
+            void el.play().catch(() => undefined);
+          } else {
+            el.pause();
+          }
+        }
+      },
+      { rootMargin: "200px" },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <video
+      ref={ref}
+      {...(visible ? { src } : {})}
+      muted
+      loop
+      playsInline
+      preload="none"
+      aria-label={title ?? "Video della barberia"}
+      className="h-full w-full bg-carbon object-cover transition-transform duration-500 group-hover:scale-105"
+    />
+  );
+}
+
 export function Gallery() {
   const { data: photos } = useQuery({
     queryKey: ["public-gallery"],
@@ -213,16 +255,7 @@ export function Gallery() {
               }`}
             >
               {img.media_type === "video" ? (
-                <video
-                  src={img.image_url}
-                  muted
-                  loop
-                  playsInline
-                  autoPlay
-                  preload="metadata"
-                  aria-label={img.title ?? "Video della barberia"}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+                <LazyVideo src={img.image_url} title={img.title} />
               ) : (
                 <img
                   src={img.image_url}

@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AppuntamentoRouteImport } from './routes/appuntamento'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PrenotaRouteImport } from './routes/prenota'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -29,6 +30,11 @@ const IndexRoute = IndexRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppuntamentoRoute = AppuntamentoRouteImport.update({
+  id: '/appuntamento',
+  path: '/appuntamento',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -80,6 +86,7 @@ const AdminServiziRoute = AdminServiziRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/appuntamento': typeof AppuntamentoRoute
   '/login': typeof LoginRoute
   '/prenota': typeof PrenotaRoute
   '/admin/blocchi': typeof AdminBlocchiRoute
@@ -92,6 +99,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/appuntamento': typeof AppuntamentoRoute
   '/login': typeof LoginRoute
   '/prenota': typeof PrenotaRoute
   '/admin/blocchi': typeof AdminBlocchiRoute
@@ -106,6 +114,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/appuntamento': typeof AppuntamentoRoute
   '/login': typeof LoginRoute
   '/prenota': typeof PrenotaRoute
   '/admin/blocchi': typeof AdminBlocchiRoute
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/appuntamento'
     | '/login'
     | '/prenota'
     | '/admin/blocchi'
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/appuntamento'
     | '/login'
     | '/prenota'
     | '/admin/blocchi'
@@ -146,6 +157,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/appuntamento'
     | '/login'
     | '/prenota'
     | '/admin/blocchi'
@@ -160,6 +172,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  AppuntamentoRoute: typeof AppuntamentoRoute
   LoginRoute: typeof LoginRoute
   PrenotaRoute: typeof PrenotaRoute
 }
@@ -178,6 +191,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/appuntamento': {
+      id: '/appuntamento'
+      path: '/appuntamento'
+      fullPath: '/appuntamento'
+      preLoaderRoute: typeof AppuntamentoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -271,6 +291,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  AppuntamentoRoute: AppuntamentoRoute,
   LoginRoute: LoginRoute,
   PrenotaRoute: PrenotaRoute,
 }
