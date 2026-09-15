@@ -11,6 +11,7 @@ import {
   Menu,
   Scissors,
   Settings,
+  Trophy,
   X,
 } from "lucide-react";
 
@@ -46,6 +47,7 @@ export const Route = createFileRoute("/admin")({
 const nav = [
   { to: "/admin", label: "Calendario", icon: CalendarDays, exact: true },
   { to: "/admin/prenotazioni", label: "Prenotazioni", icon: ClipboardList },
+  { to: "/admin/clienti", label: "Clienti & sconti", icon: Trophy },
   { to: "/admin/servizi", label: "Servizi", icon: Scissors },
   { to: "/admin/orari", label: "Orari di apertura", icon: Clock },
   { to: "/admin/blocchi", label: "Blocca orari", icon: Ban },
